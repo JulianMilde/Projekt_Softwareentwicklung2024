@@ -1,0 +1,44 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET General Workflow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Install Dependencies and Packages
+      run: |
+        dotnet restore
+        dotnet tool install -g dotnet-format
+
+    - name: Build and Test
+      run: |
+        dotnet build --no-restore --configuration Release
+        dotnet test --no-build --verbosity normal
+
+    - name: Generate Documentation
+      run: |
+        dotnet tool install -g Wyam.Tool
+        wyam --recipe CleanBlog --preview --watch
+
+    - name: Check Code Formatting
+      run: |
+        dotnet-format --check --verbosity diag
+
