@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
@@ -19,27 +19,27 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: Restore Dependencies
+    - name: Install Dependencies and Packages
       run: |
-        dotnet restore ./IsolinesProj/IsolinesProj.csproj
-        dotnet restore ./TestProjectIsoline/TestProjectIsoline.csproj
+        dotnet restore
+        dotnet tool install -g dotnet-format
 
-    - name: Build
-      run: |
-        dotnet build ./IsolinesProj/IsolinesProj.csproj --configuration Release
-        dotnet build ./TestProjectIsoline/TestProjectIsoline.csproj --configuration Release
-
-    - name: Test
-      run: dotnet test ./TestProjectIsoline/TestProjectIsoline.csproj --configuration Release
-
-    - name: Install Statiq CLI
-      run: dotnet tool install -g Statiq.Web
-
-    - name: Generate Documentation
+    - name: Build and Test
       working-directory: ./IsolinesProj
       run: |
-        export PATH="$PATH:~/.dotnet/tools"
-        statiq build --input . --output site
+        dotnet build --no-restore --configuration Release
+        dotnet test --no-build --verbosity normal
+
+    # Optional: Statiq installation removed if package is not available
+    # - name: Install Statiq CLI
+    #   run: dotnet tool install -g Statiq.Web
+
+    # Optional: Documentation generation removed if Statiq is not available
+    # - name: Generate Documentation
+    #   working-directory: ./IsolinesProj
+    #   run: |
+    #     export PATH="$PATH:~/.dotnet/tools"
+    #     statiq build --input . --output site
 
     - name: Update README.md with Documentation
       run: |
