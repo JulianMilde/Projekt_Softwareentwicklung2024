@@ -6,7 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-  <ProjectReference Include="..\Projekt\IsolinesProj\IsolinesProj.csproj" />
+  <ProjectReference Include="..\IsolinesProj\IsolinesProj.csproj" />
+
 
 
 </ItemGroup>
