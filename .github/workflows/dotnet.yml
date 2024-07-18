@@ -25,6 +25,7 @@ jobs:
         dotnet tool install -g dotnet-format
 
     - name: Build and Test
+      working-directory: ./IsolinesProj
       run: |
         dotnet build --no-restore --configuration Release
         dotnet test --no-build --verbosity normal
@@ -33,9 +34,10 @@ jobs:
       run: dotnet tool install -g Statiq.Web
 
     - name: Generate Documentation
+      working-directory: ./IsolinesProj
       run: |
         export PATH="$PATH:~/.dotnet/tools"
-        statiq build --input docs --output site
+        statiq build --input . --output site
 
     - name: Update README.md with Documentation
       run: |
@@ -47,5 +49,5 @@ jobs:
         git config --global user.email "actions@github.com"
         git config --global user.name "GitHub Actions"
         git add README.md
-        git commit -m "Update README.md with generated documentation"
+        git commit -m "Update README.md with generated documentation" || echo "No changes to commit"
         git push
