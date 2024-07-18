@@ -20,6 +20,7 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Install Dependencies and Packages
+      working-directory: ./IsolinesProj
       run: |
         dotnet restore
         dotnet tool install -g dotnet-format
@@ -42,6 +43,7 @@ jobs:
     - name: Update README.md with Documentation
       run: |
         echo "<!-- Generated Documentation -->" > README.md
+        echo "## Documentation" >> README.md
         cat site/index.html >> README.md
 
     - name: Commit and Push Changes
