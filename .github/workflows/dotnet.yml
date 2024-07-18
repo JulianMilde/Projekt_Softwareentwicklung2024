@@ -19,16 +19,18 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: Install Dependencies and Packages
+    - name: Restore Dependencies
       run: |
         dotnet restore ./IsolinesProj/IsolinesProj.csproj
-        dotnet tool install -g dotnet-format
+        dotnet restore ./TestProjectIsoline/TestProjectIsoline.csproj
 
-    - name: Build and Test
-      working-directory: ./IsolinesProj
+    - name: Build
       run: |
-        dotnet build --no-restore --configuration Release
-        dotnet test --no-build --verbosity normal
+        dotnet build ./IsolinesProj/IsolinesProj.csproj --configuration Release
+        dotnet build ./TestProjectIsoline/TestProjectIsoline.csproj --configuration Release
+
+    - name: Test
+      run: dotnet test ./TestProjectIsoline/TestProjectIsoline.csproj --configuration Release
 
     - name: Install Statiq CLI
       run: dotnet tool install -g Statiq.Web
