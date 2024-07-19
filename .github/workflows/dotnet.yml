@@ -22,14 +22,14 @@ jobs:
     - name: Restore Dependencies
       run: dotnet restore IsolinesProj/IsolinesProj.sln
 
-    - name: Build Solution
+    - name: Build Main Solution
       run: dotnet build IsolinesProj/IsolinesProj.sln --no-restore --configuration Release
 
     - name: Build Test Project
-      run: dotnet build IsolinesProj/TestProjectIsoline/TestProjectIsoline.csproj --no-restore --configuration Release
+      run: dotnet build TestProjectIsoline/TestProjectIsoline.csproj --no-restore --configuration Release
 
     - name: Test Projects
-      run: dotnet test IsolinesProj/TestProjectIsoline/TestProjectIsoline.csproj --no-build --verbosity normal
+      run: dotnet test TestProjectIsoline/TestProjectIsoline.csproj --no-build --verbosity normal
 
     - name: Install Statiq CLI
       run: dotnet tool install -g Statiq.Web
