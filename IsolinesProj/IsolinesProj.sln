@@ -4,7 +4,7 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IsolinesProj", "IsolinesProj.csproj", "{BC92A0A6-1928-4174-9AAE-4F11ABA1C16D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "..\TestProjectIsoline", "TestProjectIsoline\TestProjectIsoline.csproj", "{00FD613D-A971-4A59-887B-849FF284DBBE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProjectIsoline", "..\TestProjectIsoline\TestProjectIsoline.csproj", "{00FD613D-A971-4A59-887B-849FF284DBBE}"
 EndProject
 
 Global
