@@ -2,13 +2,13 @@ name: .NET General Workflow
 
 on:
   push:
-    branches: [ isolinebranch ]  # Der Workflow wird ausgeführt, wenn auf diesen Branch gepusht wird.
+    branches: [ isolinebranch ]
   pull_request:
-    branches: [ main ]  # Der Workflow wird ausgeführt, wenn ein Pull Request zu diesem Branch geöffnet oder aktualisiert wird.
+    branches: [ main ]
 
 jobs:
   build:
-    runs-on: windows-latest  # Da dein Build auf Windows besser funktioniert
+    runs-on: windows-latest
 
     steps:
     - name: Checkout repository
@@ -20,22 +20,21 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Restore Dependencies
-      working-directory: ./IsolinesProj
-      run: dotnet restore
+      run: dotnet restore IsolinesProj/IsolinesProj.sln
 
-    - name: Build and Test
-      working-directory: ./IsolinesProj
-      run: |
-        dotnet build --no-restore --configuration Release
-        dotnet test --no-build --verbosity normal
+    - name: Build Solution
+      run: dotnet build IsolinesProj/IsolinesProj.sln --no-restore --configuration Release
+
+    - name: Test Projects
+      run: dotnet test IsolinesProj/IsolinesProj.sln --no-build --verbosity normal
 
     - name: Install Statiq CLI
       run: dotnet tool install -g Statiq.Web
 
     - name: Generate Documentation
-      working-directory: ./IsolinesProj
       run: |
         export PATH="$PATH:~/.dotnet/tools"
+        cd IsolinesProj
         statiq build --input . --output site
 
     - name: Update README.md with Documentation
