@@ -12,18 +12,18 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.0.x'
 
     - name: Restore Dependencies
       run: dotnet restore IsolinesProj/IsolinesProj.sln
 
-    - name: Add Statiq.Web.GitHub Package
-      run: dotnet add IsolinesProj/IsolinesProj.csproj package Statiq.Web.GitHub --version 1.0.0-beta.60
+    - name: Add Statiq.Web Package
+      run: dotnet add IsolinesProj/IsolinesProj.csproj package Statiq.Web --version 1.0.0-beta.60
 
     - name: Build Main Solution
       run: dotnet build IsolinesProj/IsolinesProj.sln --no-restore --configuration Release
@@ -35,8 +35,7 @@ jobs:
       run: dotnet test IsolinesProj/IsolinesProj.sln --configuration Release --verbosity normal
 
     - name: Install Statiq CLI Tool
-      run: |
-        dotnet tool install --global Statiq.Web.GitHub --version 1.0.0-beta.60 || echo "Failed to install Statiq CLI tool"
+      run: dotnet tool install --global Statiq.Web --version 1.0.0-beta.60 || echo "Failed to install Statiq CLI tool"
 
     - name: Update PATH for Statiq CLI Tool
       run: echo "${HOME}/.dotnet/tools" >> $GITHUB_PATH
@@ -47,7 +46,7 @@ jobs:
     - name: Generate Documentation
       working-directory: IsolinesProj
       run: |
-        statiq build --input . --output site || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly installed."
+        dotnet statiq build --input . --output site || echo "Statiq build failed. Check if Statiq.Web is correctly installed."
 
     - name: Update README.md with Documentation
       run: |
