@@ -1,23 +1,21 @@
-name: Build and Deploy Statiq Website
+name: .NET General Workflow
 
 on:
   push:
-    branches:
-      - isonlinebranch
+    branches: [isonlinebranch]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3  # Update to latest version
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v3  # Update to latest version
       with:
         dotnet-version: '8.0.x'
 
@@ -27,8 +25,14 @@ jobs:
     - name: Add Statiq.Web.GitHub Package
       run: dotnet add IsolinesProj/IsolinesProj.csproj package Statiq.Web.GitHub --version 1.0.0-beta.60
 
-    - name: Build Solution
+    - name: Build Main Solution
       run: dotnet build IsolinesProj/IsolinesProj.sln --no-restore --configuration Release
+
+    - name: Build Test Project
+      run: dotnet build TestProjectIsoline/TestProjectIsoline.csproj --no-restore --configuration Release
+
+    - name: Test Projects
+      run: dotnet test IsolinesProj/IsolinesProj.sln --configuration Release --verbosity normal
 
     - name: Generate Documentation
       run: |
