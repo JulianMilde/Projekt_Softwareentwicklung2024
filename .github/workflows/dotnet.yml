@@ -25,7 +25,7 @@ jobs:
       run: dotnet restore IsolinesProj/IsolinesProj.sln
 
     - name: Add Statiq.Web Package
-      run: dotnet add IsolinesProj/IsolinesProj.csproj package Statiq.Web --version [version]
+      run: dotnet add IsolinesProj/IsolinesProj.csproj package Statiq.Web --version 1.0.0
 
     - name: Build Main Solution
       run: dotnet build IsolinesProj/IsolinesProj.sln --no-restore --configuration Release
@@ -37,7 +37,7 @@ jobs:
       run: dotnet test IsolinesProj/IsolinesProj.sln --configuration Release --verbosity normal
 
     - name: Install Statiq CLI Tool
-      run: dotnet tool install --global Statiq.Web --version [version] || echo "Failed to install Statiq CLI tool"
+      run: dotnet tool install --global Statiq.Web --version 1.0.0 || echo "Failed to install Statiq CLI tool"
 
     - name: Update PATH for Statiq CLI Tool
       run: echo "${HOME}/.dotnet/tools" >> $GITHUB_PATH
