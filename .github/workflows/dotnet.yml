@@ -13,6 +13,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+      with:
+        ref: ${{ github.ref }}  # Ensure we are on the correct branch
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
@@ -29,7 +31,7 @@ jobs:
       run: dotnet build IsolinesProj/IsolinesProj.sln --no-restore --configuration Release
 
     - name: Build Test Project
-      run: dotnet build IsolinesProj/TestProjectIsoline.csproj --no-restore --configuration Release
+      run: dotnet build TestProjectIsoline/TestProjectIsoline.csproj --no-restore --configuration Release
 
     - name: Test Projects
       run: dotnet test IsolinesProj/IsolinesProj.sln --configuration Release --verbosity normal
@@ -37,16 +39,13 @@ jobs:
     - name: Generate Documentation
       run: |
         cd IsolinesProj
-        # Ensure the Statiq CLI is correctly referenced in the .csproj
-        dotnet run --project IsolinesProj.csproj -- statiq build --config stati.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
-        # List files in the output directory for debugging
-        dir || echo "Directory does not exist."
+        # Run Statiq build
+        dotnet run --project IsolinesProj.csproj -- statiq build --config statiq.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
 
     - name: Update README.md with Documentation
       run: |
         echo "<!-- Generated Documentation -->" > README.md
-        # List files in the output directory for debugging
-        dir IsolinesProj || echo "IsolinesProj directory does not exist."
+        # Check if the site directory and index.html exist
         if (Test-Path IsolinesProj/site/index.html) {
           cat IsolinesProj/site/index.html >> README.md
         } else {
@@ -59,4 +58,5 @@ jobs:
         git config --global user.name "GitHub Actions"
         git add README.md
         git commit -m "Update README.md with generated documentation" || echo "No changes to commit"
-        git push
+        # Push changes to the correct branch
+        git push origin HEAD:${{ github.ref_name }}
