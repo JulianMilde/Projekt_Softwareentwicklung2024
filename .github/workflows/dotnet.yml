@@ -32,8 +32,8 @@ jobs:
       run: dotnet test TestProjectIsoline/TestProjectIsoline.csproj --verbosity normal
 
     - name: Install Statiq CLI
-      run: dotnet tool install -g Statiq.Web
-
+      run: |
+        dotnet tool install -g Statiq.Web --version 1.0.0-beta.60 || echo "Statiq.Web CLI could not be installed. Check if the package name is correct or if it is available in NuGet."
     - name: Generate Documentation
       run: |
         export PATH="$PATH:~/.dotnet/tools"
