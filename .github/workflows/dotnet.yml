@@ -37,13 +37,21 @@ jobs:
     - name: Generate Documentation
       run: |
         cd IsolinesProj
-        # Run Statiq build using dotnet run
-        dotnet run --project path-to-your-statiq-project -- statiq build --config Statiq.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
+        dotnet run --project IsolinesProj.csproj -- statiq build --config Statiq.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
+        # List files in the output directory for debugging
+        dir site || echo "Site directory does not exist."
 
     - name: Update README.md with Documentation
       run: |
         echo "<!-- Generated Documentation -->" > README.md
-        cat IsolinesProj/site/index.html >> README.md
+        # List files in the output directory for debugging
+        dir IsolinesProj/site || echo "Site directory does not exist."
+        # Check if index.html exists before trying to append it
+        if (Test-Path IsolinesProj/site/index.html) {
+          cat IsolinesProj/site/index.html >> README.md
+        } else {
+          echo "index.html not found." >> README.md
+        }
 
     - name: Commit and Push Changes
       run: |
