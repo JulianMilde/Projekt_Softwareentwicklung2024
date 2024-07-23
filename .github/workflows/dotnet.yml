@@ -32,18 +32,13 @@ jobs:
       run: dotnet test IsolinesProj/IsolinesProj.sln --configuration Release --verbosity normal
 
     - name: Install Statiq CLI
-      run: |
-        dotnet tool install Statiq.Web
-
+      run: dotnet tool install --global Statiq.Web
 
     - name: Update PATH for Statiq CLI
-      run: |
-        echo "Updating PATH for Statiq CLI"
-        echo "${HOME}/.dotnet/tools" >> $GITHUB_PATH
+      run: echo "${HOME}/.dotnet/tools" >> $GITHUB_PATH
 
     - name: Verify Statiq CLI Installation
-      run: |
-        statiq --version || echo "Statiq CLI not found. Check the installation path and version."
+      run: statiq --version || echo "Statiq CLI not found. Check the installation path and version."
 
     - name: Generate Documentation
       run: |
