@@ -33,7 +33,8 @@ jobs:
 
     - name: Install Statiq CLI
       run: |
-        dotnet tool install -g Statiq.Web --version 1.0.0-beta.60 || echo "Statiq.Web CLI could not be installed. Check if the package name is correct or if it is available in NuGet."
+        dotnet tool install -g Statiq.Web
+
 
     - name: Update PATH for Statiq CLI
       run: |
