@@ -23,6 +23,7 @@ jobs:
       run: dotnet restore IsolinesProj/IsolinesProj.sln
 
     - name: Add Statiq.Web.GitHub Package
+      working-directory: IsolinesProj
       run: dotnet add package Statiq.Web.GitHub --version 1.0.0-beta.60
 
     - name: Build Main Solution
@@ -35,8 +36,8 @@ jobs:
       run: dotnet test IsolinesProj/IsolinesProj.sln --configuration Release --verbosity normal
 
     - name: Generate Documentation
+      working-directory: IsolinesProj
       run: |
-        cd IsolinesProj
         statiq build --input . --output site || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly installed."
 
     - name: Update README.md with Documentation
