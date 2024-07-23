@@ -46,7 +46,7 @@ jobs:
       run: dotnet tool list --global || echo "Statiq CLI tool not found. Check if it's correctly installed and in PATH."
 
     - name: Generate Documentation
-      working-directory: IsolinesProj
+      working-directory: IsolinesProj 
       run: |
         dotnet statiq build --input . --output site || echo "Statiq build failed. Check if Statiq.Web is correctly installed."
 
