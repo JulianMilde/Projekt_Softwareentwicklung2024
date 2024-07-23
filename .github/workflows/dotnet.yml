@@ -25,14 +25,12 @@ jobs:
     - name: Build Main Solution
       run: dotnet build IsolinesProj/IsolinesProj.sln --no-restore --configuration Release
 
-    - name: Build Test Project
-      run: dotnet build TestProjectIsoline/TestProjectIsoline.csproj --no-restore --configuration Release
-
     - name: Test Projects
-      run: dotnet test TestProjectIsoline/TestProjectIsoline.csproj --verbosity normal
+      run: dotnet test IsolinesProj/IsolinesProj.sln --no-build --verbosity normal
 
     - name: Install Statiq CLI
-      run: dotnet tool install -g Statiq.Web
+      run: |
+        dotnet tool install -g Statiq.Web || echo "Statiq.Web CLI could not be installed."
 
     - name: Generate Documentation
       run: |
