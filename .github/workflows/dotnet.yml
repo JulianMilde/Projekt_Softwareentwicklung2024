@@ -33,7 +33,7 @@ jobs:
 
     - name: Install Statiq CLI
       run: |
-        dotnet tool install -g Statiq.Web
+        dotnet tool install Statiq.Web.GitHub
 
 
     - name: Update PATH for Statiq CLI
