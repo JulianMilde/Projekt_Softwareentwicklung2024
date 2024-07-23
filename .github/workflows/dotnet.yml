@@ -35,7 +35,8 @@ jobs:
       run: dotnet test IsolinesProj/IsolinesProj.sln --configuration Release --verbosity normal
 
     - name: Install Statiq CLI Tool
-      run: dotnet tool install --global Statiq.Web.GitHub --version 1.0.0-beta.60 || echo "Failed to install Statiq CLI tool"
+      run: |
+        dotnet tool install --global Statiq.Web.GitHub --version 1.0.0-beta.60 || echo "Failed to install Statiq CLI tool"
 
     - name: Update PATH for Statiq CLI Tool
       run: echo "${HOME}/.dotnet/tools" >> $GITHUB_PATH
@@ -46,7 +47,7 @@ jobs:
     - name: Generate Documentation
       working-directory: IsolinesProj
       run: |
-        dotnet statiq build --input . --output site || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly installed."
+        statiq build --input . --output site || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly installed."
 
     - name: Update README.md with Documentation
       run: |
