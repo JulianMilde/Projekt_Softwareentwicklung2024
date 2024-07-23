@@ -29,7 +29,7 @@ jobs:
       run: dotnet build IsolinesProj/IsolinesProj.sln --no-restore --configuration Release
 
     - name: Build Test Project
-      run: dotnet build TestProjectIsoline/TestProjectIsoline.csproj --no-restore --configuration Release
+      run: dotnet build IsolinesProj/TestProjectIsoline.csproj --no-restore --configuration Release
 
     - name: Test Projects
       run: dotnet test IsolinesProj/IsolinesProj.sln --configuration Release --verbosity normal
@@ -37,16 +37,16 @@ jobs:
     - name: Generate Documentation
       run: |
         cd IsolinesProj
-        dotnet run --project IsolinesProj.csproj -- statiq build --config Statiq.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
+        # Ensure the Statiq CLI is correctly referenced in the .csproj
+        dotnet run --project IsolinesProj.csproj -- statiq build --config stati.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
         # List files in the output directory for debugging
-        dir site || echo "Site directory does not exist."
+        dir || echo "Directory does not exist."
 
     - name: Update README.md with Documentation
       run: |
         echo "<!-- Generated Documentation -->" > README.md
         # List files in the output directory for debugging
-        dir IsolinesProj/site || echo "Site directory does not exist."
-        # Check if index.html exists before trying to append it
+        dir IsolinesProj || echo "IsolinesProj directory does not exist."
         if (Test-Path IsolinesProj/site/index.html) {
           cat IsolinesProj/site/index.html >> README.md
         } else {
