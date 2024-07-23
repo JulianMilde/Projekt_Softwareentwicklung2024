@@ -41,12 +41,12 @@ jobs:
       run: echo "${HOME}/.dotnet/tools" >> $GITHUB_PATH
 
     - name: Verify Statiq CLI Tool Installation
-      run: statiq --version || echo "Statiq CLI tool not found. Check if it's correctly installed and in PATH."
+      run: dotnet tool list --global || echo "Statiq CLI tool not found. Check if it's correctly installed and in PATH."
 
     - name: Generate Documentation
       working-directory: IsolinesProj
       run: |
-        statiq build --input . --output site || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly installed."
+        dotnet statiq build --input . --output site || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly installed."
 
     - name: Update README.md with Documentation
       run: |
