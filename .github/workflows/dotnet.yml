@@ -27,7 +27,7 @@ jobs:
     - name: Build and Test
       run: |
         dotnet build --no-restore --configuration Release
-        dotnet test --no-build --verbosity normal
+        dotnet test --verbosity normal
 
     - name: Install Statiq CLI
       run: dotnet tool install -g Statiq.Web
