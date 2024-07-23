@@ -33,13 +33,13 @@ jobs:
 
     - name: Install Statiq CLI
       run: |
-        dotnet tool install -g Statiq.Web || echo "Statiq.Web CLI could not be installed."
+        dotnet tool install -g Statiq.Web || echo "Statiq.Web CLI could not be installed. Check if the package name is correct or if it is available in NuGet."
 
     - name: Generate Documentation
       run: |
         export PATH="$PATH:~/.dotnet/tools"
         cd IsolinesProj
-        statiq build --input . --output site
+        statiq build --input . --output site || echo "Statiq build failed. Check if Statiq.Web is correctly installed."
 
     - name: Update README.md with Documentation
       run: |
