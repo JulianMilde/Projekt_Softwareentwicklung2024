@@ -19,6 +19,21 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
+    - name: Create Tool Manifest
+      run: dotnet new tool-manifest
+
+    - name: Install Statiq CLI
+      run: dotnet tool install Statiq.Web.GitHub --version 1.0.0-beta.60
+
+    - name: Update PATH for Statiq CLI
+      run: echo "${HOME}/.dotnet/tools" >> $GITHUB_PATH
+
+    - name: Verify Statiq CLI Installation
+      run: dotnet tool list
+
+    - name: Verify Statiq CLI Version
+      run: statiq --version || echo "Statiq CLI not found. Check the installation path and version."
+
     - name: Restore Dependencies
       run: dotnet restore IsolinesProj/IsolinesProj.sln
 
@@ -30,18 +45,6 @@ jobs:
 
     - name: Test Projects
       run: dotnet test IsolinesProj/IsolinesProj.sln --configuration Release --verbosity normal
-
-    - name: Install Statiq CLI
-      run: dotnet tool install --global Statiq.Web.GitHub
-
-    - name: Update PATH for Statiq CLI
-      run: echo "${HOME}/.dotnet/tools" >> $GITHUB_PATH
-
-    - name: Verify Statiq CLI Installation
-      run: dotnet tool list --global
-
-    - name: Verify Statiq CLI Version
-      run: statiq --version || echo "Statiq CLI not found. Check the installation path and version."
 
     - name: Generate Documentation
       run: |
