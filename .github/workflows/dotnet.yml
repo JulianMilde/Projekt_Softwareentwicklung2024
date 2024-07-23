@@ -25,24 +25,24 @@ jobs:
     - name: Build Main Solution
       run: dotnet build IsolinesProj/IsolinesProj.sln --no-restore --configuration Release
 
+    - name: Build Test Project
+      run: dotnet build TestProjectIsoline/TestProjectIsoline.csproj --no-restore --configuration Release
+
     - name: Test Projects
-      run: dotnet test IsolinesProj/IsolinesProj.sln --no-build --verbosity normal
+      run: dotnet test TestProjectIsoline/TestProjectIsoline.csproj --verbosity normal
 
     - name: Install Statiq CLI
-      run: |
-        dotnet tool install -g Statiq.Web || echo "Statiq.Web CLI could not be installed."
+      run: dotnet tool install -g Statiq.Web
 
     - name: Generate Documentation
       run: |
         export PATH="$PATH:~/.dotnet/tools"
         cd IsolinesProj
         statiq build --input . --output site
-
     - name: Update README.md with Documentation
       run: |
         echo "<!-- Generated Documentation -->" > README.md
         cat IsolinesProj/site/index.html >> README.md
-
     - name: Commit and Push Changes
       run: |
         git config --global user.email "actions@github.com"
