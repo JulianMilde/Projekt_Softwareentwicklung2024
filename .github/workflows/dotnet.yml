@@ -2,13 +2,13 @@ name: .NET General Workflow
 
 on:
   push:
-    branches: [ main ]
+    branches: [ isolinebranch ]
   pull_request:
     branches: [ main ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - name: Checkout repository
@@ -19,33 +19,37 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: Install Dependencies and Packages
-      run: |
-        dotnet restore
-        dotnet tool install -g dotnet-format
+    - name: Restore Dependencies
+      run: dotnet restore IsolinesProj/IsolinesProj.sln
 
-    - name: Build and Test
-      run: |
-        dotnet build --no-restore --configuration Release
-        dotnet test --verbosity normal
+    - name: Build Main Solution
+      run: dotnet build IsolinesProj/IsolinesProj.sln --no-restore --configuration Release
+
+    - name: Build Test Project
+      run: dotnet build TestProjectIsoline/TestProjectIsoline.csproj --no-restore --configuration Release
+
+    - name: Test Projects
+      run: dotnet test IsolinesProj/IsolinesProj.sln --configuration Release --verbosity normal
 
     - name: Install Statiq CLI
-      run: dotnet tool install -g Statiq.Web
+      run: |
+        dotnet tool install -g Statiq.Web || echo "Statiq.Web CLI could not be installed."
 
     - name: Generate Documentation
       run: |
         export PATH="$PATH:~/.dotnet/tools"
-        statiq build --input docs --output site
+        cd IsolinesProj
+        statiq build --input . --output site
 
     - name: Update README.md with Documentation
       run: |
         echo "<!-- Generated Documentation -->" > README.md
-        cat site/index.html >> README.md
+        cat IsolinesProj/site/index.html >> README.md
 
     - name: Commit and Push Changes
       run: |
         git config --global user.email "actions@github.com"
         git config --global user.name "GitHub Actions"
         git add README.md
-        git commit -m "Update README.md with generated documentation"
+        git commit -m "Update README.md with generated documentation" || echo "No changes to commit"
         git push
