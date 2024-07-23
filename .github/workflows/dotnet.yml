@@ -12,15 +12,18 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3  # Update to latest version
+      uses: actions/checkout@v3
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3  # Update to latest version
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.0.x'
 
     - name: Restore Dependencies
       run: dotnet restore IsolinesProj/IsolinesProj.sln
+
+    - name: Add Statiq.Web.GitHub Package
+      run: dotnet add IsolinesProj/IsolinesProj.csproj package Statiq.Web.GitHub --version 1.0.0-beta.60
 
     - name: Build Main Solution
       run: dotnet build IsolinesProj/IsolinesProj.sln --no-restore --configuration Release
@@ -34,7 +37,8 @@ jobs:
     - name: Generate Documentation
       run: |
         cd IsolinesProj
-        dotnet statiq build --config Statiq.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
+        # Run Statiq build using dotnet run
+        dotnet run --project path-to-your-statiq-project -- statiq build --config Statiq.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
 
     - name: Update README.md with Documentation
       run: |
