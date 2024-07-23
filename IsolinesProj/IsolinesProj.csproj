@@ -9,5 +9,6 @@
   <ItemGroup>
     <PackageReference Include="OxyPlot.Core" Version="2.1.0" />
     <PackageReference Include="OxyPlot.WindowsForms" Version="2.1.0" />
+    <PackageReference Include="Statiq.Web.GitHub" Version="1.0.0-beta.60" />
   </ItemGroup>
 </Project>
