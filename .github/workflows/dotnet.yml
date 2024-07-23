@@ -37,8 +37,7 @@ jobs:
     - name: Generate Documentation
       run: |
         cd IsolinesProj
-        # Run Statiq build using dotnet run
-        dotnet run --project path-to-your-statiq-project -- statiq build --config Statiq.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
+        dotnet run --project IsolinesProj.csproj -- statiq build --config Statiq.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
 
     - name: Update README.md with Documentation
       run: |
