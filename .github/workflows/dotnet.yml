@@ -2,7 +2,7 @@ name: .NET General Workflow
 
 on:
   push:
-    branches: [ isolinebranch ]
+    branches: [ isonlinebranch ]
   pull_request:
     branches: [ main ]
 
@@ -38,7 +38,7 @@ jobs:
     - name: Update PATH for Statiq CLI
       run: |
         echo "Updating PATH for Statiq CLI"
-        echo "::add-path::${HOME}/.dotnet/tools"
+        echo "${HOME}/.dotnet/tools" >> $GITHUB_PATH
 
     - name: Verify Statiq CLI Installation
       run: |
