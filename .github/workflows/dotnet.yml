@@ -33,11 +33,19 @@ jobs:
 
     - name: Install Statiq CLI
       run: |
-        dotnet tool install -g Statiq.Web || echo "Statiq.Web CLI could not be installed. Check if the package name is correct or if it is available in NuGet."
+        dotnet tool install -g Statiq.Web --version 1.0.0-beta.60 || echo "Statiq.Web CLI could not be installed. Check if the package name is correct or if it is available in NuGet."
+
+    - name: Update PATH for Statiq CLI
+      run: |
+        echo "Updating PATH for Statiq CLI"
+        echo "::add-path::${HOME}/.dotnet/tools"
+
+    - name: Verify Statiq CLI Installation
+      run: |
+        statiq --version || echo "Statiq CLI not found. Check the installation path and version."
 
     - name: Generate Documentation
       run: |
-        export PATH="$PATH:~/.dotnet/tools"
         cd IsolinesProj
         statiq build --input . --output site || echo "Statiq build failed. Check if Statiq.Web is correctly installed."
 
