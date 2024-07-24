@@ -54,14 +54,20 @@ jobs:
       run: |
         cd ${{ github.workspace }}
         Write-Output "Current Directory: $(Get-Location)"
-        Write-Output "Adding comment to README.md"
+        
+        # Check if the README.md file exists
         if (Test-Path README.md) {
-          Write-Output "README.md exists. Appending content."
-          "<!-- Generated Documentation -->`n" | Add-Content -Path README.md -Encoding utf8
+          Write-Output "README.md exists. Replacing content."
+          # Replace the content with the generated documentation
+          $content = Get-Content "IsolinesProj/README.md" -Raw
+          Set-Content -Path README.md -Value $content -Encoding utf8
         } else {
           Write-Output "README.md not found. Creating file."
-          "<!-- Generated Documentation -->`n" | Set-Content -Path README.md -Encoding utf8
+          # Create the file with the generated documentation
+          $content = Get-Content "IsolinesProj/README.md" -Raw
+          Set-Content -Path README.md -Value $content -Encoding utf8
         }
+        
         Write-Output "Current content of README.md:"
         Get-Content README.md
       shell: pwsh
