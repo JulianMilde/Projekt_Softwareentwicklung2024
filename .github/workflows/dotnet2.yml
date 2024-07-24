@@ -39,7 +39,6 @@ jobs:
     - name: Generate Documentation
       run: |
         cd VerticalGradient
-
         # Run Statiq build
         dotnet run --project VerticalGradient.csproj -- statiq build --config statiq.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
 
