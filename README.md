@@ -1,5 +1,1 @@
-<!-- Generated Documentation -->
-<!-- Generated Documentation -->
-
-<!-- Generated Documentation -->
-
+# Automatische Dokumentation
