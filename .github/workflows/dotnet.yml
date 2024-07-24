@@ -14,7 +14,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
-        ref: ${{ github.ref }}  # Ensure we are on the correct branch
+        ref: ${{ github.ref }}  
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
@@ -44,8 +44,15 @@ jobs:
 
     - name: Update README.md with Documentation
       run: |
+        # Use PowerShell to handle file operations
+        cd IsolinesProj
         echo "<!-- Generated Documentation -->" > README.md
-        cat IsolinesProj/README.md >> README.md
+        # Check if the site directory and index.html exist
+        if (Test-Path "site/index.html") {
+          Get-Content "site/index.html" >> README.md
+        } else {
+          echo "index.html not found." >> README.md
+        }
 
     - name: Commit and Push Changes
       run: |
@@ -55,5 +62,3 @@ jobs:
         git commit -m "Update README.md with generated documentation" || echo "No changes to commit"
         # Push changes using the GITHUB_TOKEN for authentication
         git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
