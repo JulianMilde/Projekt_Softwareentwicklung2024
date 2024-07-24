@@ -44,19 +44,24 @@ jobs:
         ls -R
       shell: pwsh
 
+    - name: Check Environment Variables
+      run: |
+        Write-Output "DOTNET_ROOT: $env:DOTNET_ROOT"
+        Write-Output "Current Directory: $(Get-Location)"
+      shell: pwsh
+
     - name: Update README.md with Documentation
       run: |
-        # Ensure we are in the root directory
         cd ${{ github.workspace }}
-
-        # Add a comment to README.md
-        "<!-- Generated Documentation -->" | Out-File -FilePath README.md -Encoding utf8
-
-        # Check if README.md exists and append its content
+        Write-Output "Current Directory: $(Get-Location)"
+        Write-Output "Adding comment to README.md"
+        "<!-- Generated Documentation -->" | Add-Content -Path README.md -Encoding utf8
         if (Test-Path README.md) {
-          Get-Content README.md | Out-File -FilePath README.md -Append -Encoding utf8
+          Write-Output "README.md exists. Appending content."
+          "<!-- Generated Documentation -->`n" | Add-Content -Path README.md -Encoding utf8
         } else {
-          "<!-- Generated Documentation -->`nREADME.md not found." | Out-File -FilePath README.md -Append -Encoding utf8
+          Write-Output "README.md not found. Creating file."
+          "<!-- Generated Documentation -->`nREADME.md not found." | Set-Content -Path README.md -Encoding utf8
         }
       shell: pwsh
       env:
