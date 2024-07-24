@@ -36,28 +36,9 @@ jobs:
     - name: Test Projects
       run: dotnet test VerticalGradient/VerticalGradient.sln --configuration Release --verbosity normal
 
-    - name: Generate Documentation
+    # Optional: Environment Check
+    - name: Check Environment Variables
       run: |
-        cd VerticalGradient
-        # Run Statiq build
-        dotnet run --project VerticalGradient.csproj -- statiq build --config statiq.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
-
-    - name: Update README.md with Documentation
-      run: |
-        # Ensure we are in the root directory
-        cd ${{ github.workspace }}
-        echo "<!-- Generated Documentation -->" > README.md
-        # Append the generated documentation content from the VerticalGradient directory
-        if [ -f VerticalGradient/README.md ]; then
-          cat VerticalGradient/README.md >> README.md
-        else
-          echo "README.md in VerticalGradient not found." >> README.md
-        fi
-        
-    - name: Commit and Push Changes
-      run: |
-        git config --global user.email "actions@github.com"
-        git config --global user.name "GitHub Actions"
-        git add README.md
-        git commit -m "Update README.md with generated documentation" || echo "No changes to commit"
-        git push
+        Write-Output "DOTNET_ROOT: $env:DOTNET_ROOT"
+        Write-Output "Current Directory: $(Get-Location)"
+      shell: pwsh
