@@ -44,9 +44,15 @@ jobs:
 
     - name: Update README.md with Documentation
       run: |
+        # Ensure we are in the root directory
+        cd ${{ github.workspace }}
         echo "<!-- Generated Documentation -->" > README.md
-        # Append generated documentation content directly
-        cat IsolinesProj/README.md >> README.md
+        # Append the generated documentation content from the IsolinesProj directory
+        if [ -f IsolinesProj/README.md ]; then
+          cat IsolinesProj/README.md >> README.md
+        else
+          echo "README.md in IsolinesProj not found." >> README.md
+        fi
 
     - name: Commit and Push Changes
       run: |
