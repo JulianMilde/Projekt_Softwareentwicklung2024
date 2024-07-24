@@ -57,7 +57,7 @@ jobs:
         if (Test-Path README.md) {
 
           "<!-- Generated Documentation -->" | Out-File -FilePath README.md -Encoding utf8
-          Get-Content IsolinesProj/README.md | Out-File -FilePath README.md -Append -Encoding utf8
+          Get-Content README.md | Out-File -FilePath README.md -Append -Encoding utf8
         } else {
          
           "<!-- Generated Documentation -->`nREADME.md in IsolinesProj not found." | Out-File -FilePath README.md -Append -Encoding utf8
