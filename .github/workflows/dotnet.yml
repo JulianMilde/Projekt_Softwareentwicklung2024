@@ -2,7 +2,7 @@ name: .NET General Workflow
 
 on:
   push:
-    branches: [isonlinebranch]
+    branches: [isolinebranch]
   pull_request:
     branches: [main]
 
