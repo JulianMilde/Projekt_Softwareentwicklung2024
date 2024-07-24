@@ -45,12 +45,7 @@ jobs:
     - name: Update README.md with Documentation
       run: |
         echo "<!-- Generated Documentation -->" > README.md
-        # Check if the site directory and index.html exist
-        if (Test-Path IsolinesProj/site/index.html) {
-          cat IsolinesProj/site/index.html >> README.md
-        } else {
-          echo "index.html not found." >> README.md
-        }
+        cat IsolinesProj/README.md >> README.md
 
     - name: Commit and Push Changes
       run: |
@@ -60,3 +55,5 @@ jobs:
         git commit -m "Update README.md with generated documentation" || echo "No changes to commit"
         # Push changes using the GITHUB_TOKEN for authentication
         git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
