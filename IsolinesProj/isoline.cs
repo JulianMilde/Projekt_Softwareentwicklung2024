@@ -240,11 +240,17 @@ class Program
 
         // Festlegung des Titels der Karte
         string plotTitle = string.Empty;
-        while (true)
+       while (true)
         {
+        TimeSpan elapsed = DateTime.Now - startTime;
+        if (elapsed.TotalMinutes >= 2)
+        {
+            Console.WriteLine("Time limit exceeded. The operation has been cancelled.");
+            return;
+        }
         Console.WriteLine("Bitte geben Sie den Titel für die Isolinienkarte ein:");
         plotTitle = Console.ReadLine() ?? string.Empty;
-
+           
         if (!string.IsNullOrWhiteSpace(plotTitle))
         {
             break;
