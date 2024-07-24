@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RootNamespace>VertikalgradientBerechnung</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="OxyPlot.Core" Version="2.1.2"/>
+    <PackageReference Include="OxyPlot.SkiaSharp" Version="2.1.2"/>
+  </ItemGroup>
+</Project>
