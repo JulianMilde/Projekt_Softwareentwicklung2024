@@ -2,50 +2,71 @@ name: .NET General Workflow
 
 on:
   push:
-    branches: [ main ]
+    branches: [isolinebranch]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ github.ref }}  # Ensure we are on the correct branch
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.0.x'
 
-    - name: Install Dependencies and Packages
-      run: |
-        dotnet restore
-        dotnet tool install -g dotnet-format
+    - name: Restore Dependencies
+      run: dotnet restore IsolinesProj/IsolinesProj.sln
 
-    - name: Build and Test
-      run: |
-        dotnet build --no-restore --configuration Release
-        dotnet test --no-build --verbosity normal
+    - name: Add Statiq.Web.GitHub Package
+      run: dotnet add IsolinesProj/IsolinesProj.csproj package Statiq.Web.GitHub --version 1.0.0-beta.60
 
-    - name: Install Statiq CLI
-      run: dotnet tool install -g Statiq.Web
+    - name: Build Main Solution
+      run: dotnet build IsolinesProj/IsolinesProj.sln --no-restore --configuration Release
+
+    - name: Build Test Project
+      run: dotnet build TestProjectIsoline/TestProjectIsoline.csproj --no-restore --configuration Release
+
+    - name: Test Projects
+      run: dotnet test IsolinesProj/IsolinesProj.sln --configuration Release --verbosity normal
 
     - name: Generate Documentation
       run: |
-        export PATH="$PATH:~/.dotnet/tools"
-        statiq build --input docs --output site
+        cd IsolinesProj
+        # Run Statiq build
+        dotnet run --project IsolinesProj.csproj -- statiq build --config statiq.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
 
     - name: Update README.md with Documentation
       run: |
-        echo "<!-- Generated Documentation -->" > README.md
-        cat site/index.html >> README.md
+        # Ensure we are in the root directory
+        cd ${{ github.workspace }}
+
+        # Add a comment to README.md
+        "<!-- Generated Documentation -->" | Out-File -FilePath README.md -Encoding utf8
+
+        # Check if the IsolinesProj/README.md exists and append its content
+        if (Test-Path IsolinesProj/README.md) {
+          Get-Content IsolinesProj/README.md | Out-File -FilePath README.md -Append -Encoding utf8
+        } else {
+          "README.md in IsolinesProj not found." | Out-File -FilePath README.md -Append -Encoding utf8
+        }
+      shell: pwsh
+      env:
+        DOTNET_ROOT: C:\Program Files\dotnet
 
     - name: Commit and Push Changes
       run: |
         git config --global user.email "actions@github.com"
         git config --global user.name "GitHub Actions"
         git add README.md
-        git commit -m "Update README.md with generated documentation"
-        git push
+        git commit -m "Update README.md with generated documentation" || echo "No changes to commit"
+        # Push changes using the GITHUB_TOKEN for authentication
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

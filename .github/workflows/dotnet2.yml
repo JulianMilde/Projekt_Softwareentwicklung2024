@@ -39,11 +39,22 @@ jobs:
     - name: Generate Documentation
       run: |
         cd VerticalGradient
-        statiq build --input . --output site || echo "Statiq build failed. Check if Statiq.Web is correctly installed."
+
+        # Run Statiq build
+        dotnet run --project VerticalGradient.csproj -- statiq build --config statiq.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
+
     - name: Update README.md with Documentation
       run: |
+        # Ensure we are in the root directory
+        cd ${{ github.workspace }}
         echo "<!-- Generated Documentation -->" > README.md
-        cat site/index.html >> README.md
+        # Append the generated documentation content from the VerticalGradient directory
+        if [ -f VerticalGradient/README.md ]; then
+          cat VerticalGradient/README.md >> README.md
+        else
+          echo "README.md in VerticalGradient not found." >> README.md
+        fi
+        
     - name: Commit and Push Changes
       run: |
         git config --global user.email "actions@github.com"
