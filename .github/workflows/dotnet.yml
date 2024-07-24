@@ -46,13 +46,19 @@ jobs:
       run: |
         # Ensure we are in the root directory
         cd ${{ github.workspace }}
-        echo "<!-- Generated Documentation -->" > README.md
-        # Append the generated documentation content from the IsolinesProj directory
-        if [ -f IsolinesProj/README.md ]; then
-          cat IsolinesProj/README.md >> README.md
-        else
-          echo "README.md in IsolinesProj not found." >> README.md
-        fi
+
+        # Add a comment to README.md
+        "<!-- Generated Documentation -->" | Out-File -FilePath README.md -Encoding utf8
+
+        # Check if the IsolinesProj/README.md exists and append its content
+        if (Test-Path IsolinesProj/README.md) {
+          Get-Content IsolinesProj/README.md | Out-File -FilePath README.md -Append -Encoding utf8
+        } else {
+          "README.md in IsolinesProj not found." | Out-File -FilePath README.md -Append -Encoding utf8
+        }
+      shell: pwsh
+      env:
+        DOTNET_ROOT: C:\Program Files\dotnet
 
     - name: Commit and Push Changes
       run: |
