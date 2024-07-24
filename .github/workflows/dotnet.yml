@@ -14,7 +14,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
-        ref: ${{ github.ref }}  
+        ref: ${{ github.ref }}  # Ensure we are on the correct branch
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
@@ -43,27 +43,18 @@ jobs:
         dotnet run --project IsolinesProj.csproj -- statiq build --config statiq.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
 
     - name: Update README.md with Documentation
-      shell: pwsh
       run: |
-        # PowerShell script to handle file operations
-        $readmePath = "IsolinesProj/README.md"
-        $indexPath = "IsolinesProj/site/index.html"
-
-        # Write initial comment to README.md
-        "<!-- Generated Documentation -->" | Out-File -FilePath $readmePath -Encoding utf8
-
-        # Check if index.html exists and append its content to README.md
-        if (Test-Path -Path $indexPath) {
-          Get-Content -Path $indexPath | Out-File -FilePath $readmePath -Append -Encoding utf8
-        } else {
-          "index.html not found." | Out-File -FilePath $readmePath -Append -Encoding utf8
-        }
+        echo "<!-- Generated Documentation -->" > README.md
+        # Append generated documentation content directly
+        cat IsolinesProj/README.md >> README.md
 
     - name: Commit and Push Changes
       run: |
         git config --global user.email "actions@github.com"
         git config --global user.name "GitHub Actions"
-        git add IsolinesProj/README.md
+        git add README.md
         git commit -m "Update README.md with generated documentation" || echo "No changes to commit"
         # Push changes using the GITHUB_TOKEN for authentication
         git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
