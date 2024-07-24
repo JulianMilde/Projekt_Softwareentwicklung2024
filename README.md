@@ -6,4 +6,4 @@ Die mit Doxygen erstellte Dokumentation kann [hier](https://66a14395bdc91f1b74d2
 Die restlichen manuell erstellten Dokumentationsaspekte (inklusive der benötigten Pakete) lassen sich im Wiki finden.
 
 
-# **hier kommt noch ein Link zum Tutorialvideo**
+**hier kommt noch ein Link zum Tutorialvideo**
