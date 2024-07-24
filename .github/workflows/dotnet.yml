@@ -14,7 +14,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
-        ref: ${{ github.ref }}  # Ensure we are on the correct branch
+        ref: ${{ github.ref }}
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
@@ -39,7 +39,7 @@ jobs:
     - name: Generate Documentation
       run: |
         cd IsolinesProj
-        dotnet run --project IsolinesProj.csproj -- statiq build --config statiq.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
+        dotnet run --project IsolinesProj.csproj -- statiq build --config statiq.config
         echo "Listing files in IsolinesProj:"
         ls -R
       shell: pwsh
@@ -55,14 +55,15 @@ jobs:
         cd ${{ github.workspace }}
         Write-Output "Current Directory: $(Get-Location)"
         Write-Output "Adding comment to README.md"
-        "<!-- Generated Documentation -->" | Add-Content -Path README.md -Encoding utf8
         if (Test-Path README.md) {
           Write-Output "README.md exists. Appending content."
           "<!-- Generated Documentation -->`n" | Add-Content -Path README.md -Encoding utf8
         } else {
           Write-Output "README.md not found. Creating file."
-          "<!-- Generated Documentation -->`nREADME.md not found." | Set-Content -Path README.md -Encoding utf8
+          "<!-- Generated Documentation -->`n" | Set-Content -Path README.md -Encoding utf8
         }
+        Write-Output "Current content of README.md:"
+        Get-Content README.md
       shell: pwsh
       env:
         DOTNET_ROOT: C:\Program Files\dotnet
@@ -73,7 +74,6 @@ jobs:
         git config --global user.name "GitHub Actions"
         git add README.md
         git commit -m "Update README.md with generated documentation" || echo "No changes to commit"
-        # Push changes using the GITHUB_TOKEN for authentication
         git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
