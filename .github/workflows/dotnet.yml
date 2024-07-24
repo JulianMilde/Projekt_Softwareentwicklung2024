@@ -24,9 +24,6 @@ jobs:
     - name: Restore Dependencies
       run: dotnet restore IsolinesProj/IsolinesProj.sln
 
-    - name: Add Statiq.Web.GitHub Package
-      run: dotnet add IsolinesProj/IsolinesProj.csproj package Statiq.Web.GitHub --version 1.0.0-beta.60
-
     - name: Build Main Solution
       run: dotnet build IsolinesProj/IsolinesProj.sln --no-restore --configuration Release
 
@@ -36,44 +33,9 @@ jobs:
     - name: Test Projects
       run: dotnet test IsolinesProj/IsolinesProj.sln --configuration Release --verbosity normal
 
-    # Remove or comment out the following steps to stop generating and updating documentation
-    
-    # - name: Generate Documentation
-    #   run: |
-    #     cd IsolinesProj
-    #     dotnet run --project IsolinesProj.csproj -- statiq build --config statiq.config
-    #     echo "Listing files in IsolinesProj:"
-    #     ls -R
-    #   shell: pwsh
-
-    # - name: Update README.md with Documentation
-    #   run: |
-    #     cd ${{ github.workspace }}
-    #     Write-Output "Current Directory: $(Get-Location)"
-    #     Write-Output "Adding comment to README.md"
-    #     $content = "<!-- Generated Documentation -->"
-    
-    #     if (Test-Path README.md) {
-    #       Write-Output "README.md exists. Appending content."
-    #       $existingContent = Get-Content README.md
-    #       Set-Content -Path README.md -Value "$existingContent`n$content" -Encoding utf8
-    #     } else {
-    #       Write-Output "README.md not found. Creating file."
-    #       Set-Content -Path README.md -Value $content -Encoding utf8
-    #     }
-
-    #     Write-Output "Current content of README.md:"
-    #     Get-Content README.md
-    #   shell: pwsh
-    #   env:
-    #     DOTNET_ROOT: C:\Program Files\dotnet
-
-    # - name: Commit and Push Changes
-    #   run: |
-    #     git config --global user.email "actions@github.com"
-    #     git config --global user.name "GitHub Actions"
-    #     git add README.md
-    #     git commit -m "Update README.md with generated documentation" || echo "No changes to commit"
-    #     git push origin HEAD:refs/heads/${{ github.ref_name }}
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # Optional: Environment Check
+    - name: Check Environment Variables
+      run: |
+        Write-Output "DOTNET_ROOT: $env:DOTNET_ROOT"
+        Write-Output "Current Directory: $(Get-Location)"
+      shell: pwsh
