@@ -39,7 +39,6 @@ jobs:
     - name: Generate Documentation
       run: |
         cd IsolinesProj
-       
         dotnet run --project IsolinesProj.csproj -- statiq build --config statiq.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
         
         echo "Listing files in IsolinesProj:"
@@ -48,19 +47,17 @@ jobs:
 
     - name: Update README.md with Documentation
       run: |
-     
+        # Ensure we are in the root directory
         cd ${{ github.workspace }}
 
+        # Add a comment to README.md
         "<!-- Generated Documentation -->" | Out-File -FilePath README.md -Encoding utf8
 
-      
+        # Check if README.md exists and append its content
         if (Test-Path README.md) {
-
-          "<!-- Generated Documentation -->" | Out-File -FilePath README.md -Encoding utf8
           Get-Content README.md | Out-File -FilePath README.md -Append -Encoding utf8
         } else {
-         
-          "<!-- Generated Documentation -->`nREADME.md in IsolinesProj not found." | Out-File -FilePath README.md -Append -Encoding utf8
+          "<!-- Generated Documentation -->`nREADME.md not found." | Out-File -FilePath README.md -Append -Encoding utf8
         }
       shell: pwsh
       env:
