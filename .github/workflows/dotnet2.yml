@@ -2,12 +2,10 @@ name: .NET General Workflow 2
 
 on:
   push:
-    branches:
-      - verticalgradientbranch
+    branches: [verticalgradientbranch]
   pull_request:
-    branches:
-      - verticalgradientbranch
-
+    branches: [verticalgradientbranch]
+    
 jobs:
   build:
     runs-on: windows-latest
