@@ -58,5 +58,5 @@ jobs:
         git config --global user.name "GitHub Actions"
         git add README.md
         git commit -m "Update README.md with generated documentation" || echo "No changes to commit"
-        # Push changes to the correct branch
-        git push origin HEAD:${{ github.ref_name }}
+        # Push changes using the GITHUB_TOKEN for authentication
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
