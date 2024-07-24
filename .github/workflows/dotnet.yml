@@ -51,26 +51,26 @@ jobs:
       shell: pwsh
 
     - name: Update README.md with Documentation
-  run: |
-    cd ${{ github.workspace }}
-    Write-Output "Current Directory: $(Get-Location)"
-    Write-Output "Adding comment to README.md"
-    $content = "<!-- Generated Documentation -->"
+      run: |
+        cd ${{ github.workspace }}
+        Write-Output "Current Directory: $(Get-Location)"
+        Write-Output "Adding comment to README.md"
+        $content = "<!-- Generated Documentation -->"
     
-    if (Test-Path README.md) {
-      Write-Output "README.md exists. Appending content."
-      $existingContent = Get-Content README.md
-      Set-Content -Path README.md -Value "$existingContent`n$content" -Encoding utf8
-    } else {
-      Write-Output "README.md not found. Creating file."
-      Set-Content -Path README.md -Value $content -Encoding utf8
-    }
+        if (Test-Path README.md) {
+          Write-Output "README.md exists. Appending content."
+          $existingContent = Get-Content README.md
+          Set-Content -Path README.md -Value "$existingContent`n$content" -Encoding utf8
+        } else {
+          Write-Output "README.md not found. Creating file."
+          Set-Content -Path README.md -Value $content -Encoding utf8
+        }
 
-    Write-Output "Current content of README.md:"
-    Get-Content README.md
-  shell: pwsh
-  env:
-    DOTNET_ROOT: C:\Program Files\dotnet
+        Write-Output "Current content of README.md:"
+        Get-Content README.md
+      shell: pwsh
+      env:
+        DOTNET_ROOT: C:\Program Files\dotnet
 
 
     - name: Commit and Push Changes
