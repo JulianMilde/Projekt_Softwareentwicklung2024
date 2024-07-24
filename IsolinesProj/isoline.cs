@@ -238,6 +238,7 @@ class Program
         const int resolutionX = 400;
         const int resolutionY = 400;
 
+        DateTime startTime = DateTime.Now;
         // Festlegung des Titels der Karte
         string plotTitle = string.Empty;
        while (true)
