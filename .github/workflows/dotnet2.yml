@@ -4,7 +4,7 @@ on:
   push:
     branches: [verticalgradientbranch]
   pull_request:
-    branches: [verticalgradientbranch]
+    branches: [main]
     
 jobs:
   build:
@@ -21,6 +21,9 @@ jobs:
 
     - name: Restore Dependencies
       run: dotnet restore VerticalGradient/VerticalGradient.sln
+
+    - name: Add Statiq.Web.GitHub Package
+      run: dotnet add VerticalGradient/VerticalGradient.csproj package Statiq.Web.GitHub --version 1.0.0-beta.60
 
     - name: Build Main Solution
       run: dotnet build VerticalGradient/VerticalGradient.sln --no-restore --configuration Release
