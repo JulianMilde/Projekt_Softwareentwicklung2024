@@ -40,7 +40,6 @@ jobs:
       run: |
         cd IsolinesProj
         dotnet run --project IsolinesProj.csproj -- statiq build --config statiq.config || echo "Statiq build failed. Check if Statiq.Web.GitHub is correctly configured."
-        
         echo "Listing files in IsolinesProj:"
         ls -R
       shell: pwsh
